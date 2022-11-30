@@ -63,6 +63,7 @@ async function fillData() {
       setFilme(movie);
     }
   }
+  document.getElementById("importIMDb").style.display = "none";
   refreshPage();
 }
 
@@ -83,25 +84,46 @@ const refreshPage = () => {
 
 //Verificacao dos campos do formulario para adicionar um filme
 function verifyTitle() {
-  //se o filme ja existe deve exibir outra mensagem "Titulo do filme ja existe"
-  //ou algo nesse sentido
+  let spanAlert = document.getElementById("spanAlertTitle");
+  let inputTitle = document.getElementById("inputTitle");
   let itsEmpity =
     document.getElementById("inputTitle").value === "" ? false : true;
   // console.log(itsEmpity);
+
   if (itsEmpity) {
-    document.getElementById("spanAlertTitle").style.display = "none";
-    document.getElementById(
-      "inputTitle"
-    ).style.cssText = `border-color:rgba(0,255,0,.5);
+    spanAlert.style.display = "none";
+    inputTitle.style.cssText = `border-color:rgba(0,255,0,.5);
                        transition: 0.15s`;
+
+    let item = document.getElementById("inputTitle");
+    if (localStorage.getItem(item.value)) {
+      spanAlert.innerText = "Filme ja existe";
+      spanAlert.style.display = "block";
+      inputTitle.style.cssText = `border-color:rgba(255,0,0,.5);
+                                  transition: 0.15s`;
+      return false;
+    }
     return itsEmpity;
   } else {
-    document.getElementById("spanAlertTitle").style.display = "block";
-    document.getElementById(
-      "inputTitle"
-    ).style.cssText = `border-color:rgba(255,0,0,.5);
+    spanAlert.style.display = "block";
+    inputTitle.style.cssText = `border-color:rgba(255,0,0,.5);
                        transition: 0.15s`;
     return itsEmpity;
+  }
+}
+function verifyNewTitle() {
+  let oldTitle = document.getElementById("inputGroupSelect01").value;
+  let newTitle = document.getElementById("editMovieTitleId");
+  let spanAlert = document.getElementById("spanAlertNewTitle");
+  if (oldTitle === newTitle.value) {
+    spanAlert.style.display = "none";
+    return true;
+  } else if (localStorage.getItem(newTitle.value)) {
+    spanAlert.style.display = "block";
+    return false;
+  } else {
+    spanAlert.style.display = "none";
+    return true;
   }
 }
 function verifySummary() {
@@ -229,6 +251,7 @@ function submitFormAddMovie() {
       });
 
       $("#modalAddMovieCheck").modal("hide");
+      formReset();
       refreshPage();
     });
     document
@@ -267,6 +290,7 @@ function editMovie() {
       <input
         type="text"
         class="form-control" placeholder="Nome do Filme" id="editMovieTitleId" value= '${movie.title}' />
+        <span  class="spanAlert" id="spanAlertNewTitle">Filme ja existe</span>
     </div>
     <div class="form-group">
       <label for="inputNewSummary">Resumo do Filme</label>
@@ -319,7 +343,12 @@ function saveChanges() {
   let newScore = document.getElementById("inputNewScore");
   let newYear = document.getElementById("inputNewYear");
   // console.log(1894 < newYear.value < 2100);
-  if (movieToEdit.value != "" && 1894 < newYear.value && newYear.value < 2100) {
+  if (
+    movieToEdit.value != "" &&
+    1894 < newYear.value &&
+    newYear.value < 2100 &&
+    verifyNewTitle()
+  ) {
     $("#modalEdit").modal("hide");
     $("#modalEditMovieCheck").modal("show");
     let p = document.getElementById("textConfirmEditMOv");
@@ -347,6 +376,7 @@ function saveChanges() {
         localStorage.removeItem(movieToEdit.value);
         setFilme(newInfoMovie);
         $("#modalEditMovieCheck").modal("hide");
+        resetEdit();
         refreshPage();
       });
   }
