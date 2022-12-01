@@ -19,7 +19,6 @@ function createMovieElement({ score, title, summary, year }) {
   return mainDiv;
 }
 
-// funcoes para popular dados
 async function getMovieList() {
   //   list films prime video;
   let url = "https://imdb-api.com/en/API/IMDbList/k_4i6sjtv3/ls563191619";
@@ -50,7 +49,6 @@ async function fillData() {
   for (i = 0; i < 10; i++) {
     let summary = await getMovie(moviesList.items[i].id);
     if (summary != "" && summary != undefined) {
-      // console.log(moviesList.items[i].title, summary);
       let movie = {
         title: moviesList.items[i].title,
         summary:
@@ -77,7 +75,6 @@ const refreshPage = () => {
   for (let i = 0; i < localStorage.length; i++) {
     let key = localStorage.key(i);
     let value = JSON.parse(localStorage.getItem(key));
-    // console.log(value);
     body.appendChild(createMovieElement(value));
   }
 };
@@ -88,7 +85,6 @@ function verifyTitle() {
   let inputTitle = document.getElementById("inputTitle");
   let itsEmpity =
     document.getElementById("inputTitle").value === "" ? false : true;
-  // console.log(itsEmpity);
 
   if (itsEmpity) {
     spanAlert.style.display = "none";
@@ -129,7 +125,6 @@ function verifyNewTitle() {
 function verifySummary() {
   let itsEmpity =
     document.getElementById("inputSummary").value === "" ? false : true;
-  // console.log(itsEmpity);
   if (itsEmpity) {
     document.getElementById("spanAlertSummary").style.display = "none";
     document.getElementById(
@@ -149,7 +144,6 @@ function verifySummary() {
 function verifyYear() {
   let alertYear = document.getElementById("spanAlertYear");
   let yearElement = document.getElementById("inputYear");
-  // console.log(yearElement.value);
   if (yearElement.value > 2100 || yearElement.value < 1894) {
     alertYear.style.display = "block";
     yearElement.style.cssText = `border-color:rgba(255,0,0,.5);
@@ -165,7 +159,6 @@ function verifyYear() {
 function verifyNewYear() {
   let alertYear = document.getElementById("spanAlertNewYear");
   let yearElement = document.getElementById("inputNewYear");
-  // console.log(yearElement.value);
   if (yearElement.value > 2100 || yearElement.value < 1894) {
     alertYear.style.display = "block";
     yearElement.style.cssText = `border-color:rgba(255,0,0,.5);
@@ -180,7 +173,6 @@ function verifyNewYear() {
 }
 function verifyScore() {
   let score = document.getElementById("inputScore").value;
-  // console.log(score);
   let prev = document.getElementById("showPreview");
   prev.innerText = "Nota: " + score;
   if (score === "") {
@@ -191,7 +183,6 @@ function verifyScore() {
 }
 function verifyNewScore() {
   let score = document.getElementById("inputNewScore").value;
-  // console.log(score);
   let prev = document.getElementById("showNewPreview");
   prev.innerText = "Nota: " + score;
   if (score === "") {
@@ -242,7 +233,6 @@ function submitFormAddMovie() {
                   Nota: ${score.value}<br>`;
     let cofirm = document.getElementById("checkedInfoAddMovie");
     cofirm.addEventListener("click", () => {
-      // console.log("log");
       setFilme({
         title: title.value,
         summary: summary.value,
@@ -279,7 +269,6 @@ function editMovie() {
   } else {
     selectMovie.replaceChildren();
     let movie = JSON.parse(localStorage.getItem(movieToEdit));
-    // console.log(movie.title);
     selectMovie.insertAdjacentHTML(
       "beforeEnd",
       `
@@ -342,7 +331,6 @@ function saveChanges() {
   let newSummary = document.getElementById("inputNewSummary");
   let newScore = document.getElementById("inputNewScore");
   let newYear = document.getElementById("inputNewYear");
-  // console.log(1894 < newYear.value < 2100);
   if (
     movieToEdit.value != "" &&
     1894 < newYear.value &&
@@ -361,8 +349,10 @@ function saveChanges() {
                   Resumo:${
                     newSummary.value === "" ? movie.summary : newSummary.value
                   } <br>
-                  Ano de Lancamento: ${newScore.value}<br>
-                  Nota: ${newYear.value === "" ? movie.year : newYear.value}<br>
+                  Ano de Lancamento: ${
+                    newYear.value === "" ? movie.year : newYear.value
+                  }<br>
+                  Nota:${newScore.value} <br>
                 `;
     document
       .getElementById("checkedInfoEditMovie")
@@ -426,7 +416,6 @@ function resetFormDelete() {
 }
 function deleteMovie() {
   let movieToRemove = document.getElementById("inputGroupSelect02");
-  // console.log(JSON.stringify(movieToRemove));
   if (!(movieToRemove.value === "")) {
     $("#modalDelete").modal("hide");
     $("#modalDeleteMovieCheck").modal("show");

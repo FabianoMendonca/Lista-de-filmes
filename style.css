@@ -13,7 +13,6 @@ body {
 .card {
   margin: 20px;
   background-color: #101114;
-  /* background-color:#007bff; */
   border: 2px solid;
   border-color: #a073ea;
   border-radius: 5px;
@@ -59,12 +58,6 @@ body {
   margin-right: 25vw;
   color: #a073ea;
   font-family: "space grotesk";
-  /* background: #722ed02a;
-  border-radius: 16px;
-  box-shadow: 0 4px 30px #712de0;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1); */
 }
 
 #inputSummary {
